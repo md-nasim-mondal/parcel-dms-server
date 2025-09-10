@@ -1,10 +1,10 @@
 import { Types } from "mongoose";
 
 export enum Role {
-  SUPER_ADMIN = "SUPER_ADMIN",
-  ADMIN = "ADMIN",
-  SENDER = "SENDER",
-  RECEIVER = "RECEIVER",
+  SUPER_ADMIN = "super_admin",
+  ADMIN = "admin",
+  SENDER = "sender",
+  RECEIVER = "receiver",
 }
 
 //auth providers
@@ -19,9 +19,9 @@ export interface IAuthProvider {
 }
 
 export enum IsActive {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-  BLOCKED = "BLOCKED",
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  BLOCKED = "blocked",
 }
 
 export interface IUser {
