@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Frontend -> Form Data with Image File -> Body
 
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
 import { envVars } from "./env";
 import AppError from "../errorHelpers/AppError";
 import stream from "stream";
-
-// Amader Folder -> image -> form data -> file -> Multer -> Nijer ekta folder (temporary) -> req.file
-
-// req.file -> cloudinary(req.file) -> mongoose -> mongodb
 
 cloudinary.config({
   cloud_name: envVars.CLOUDINARY.CLOUDINARY_CLOUD_NAME,
@@ -65,9 +60,3 @@ export const deleteImageFromCloudinary = async (url: string) => {
 };
 
 export const cloudinaryUpload = cloudinary;
-
-// const uploadToCloudinary = cloudinary.uploader()
-
-// Amader Folder -> image -> form data -> file -> Multer -> storage in cloudinary (temporary) -> req.file -> package(req.file) -> url -> req.file -> mongoose -> mongodb
-
-// Amader Folder -> image -> form data -> file -> Multer -> storage in cloudinary (temporary) -> req.file -> url -> mongoose -> mongodb
