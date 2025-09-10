@@ -3,10 +3,10 @@
 import { NextFunction, Request, Response } from "express";
 import { envVars } from "../config/env";
 import AppError from "../errorHelpers/AppError";
-import { handleCastError } from "../helpers/handleCastError";
-import { handlerDuplicateError } from "../helpers/handleDuplicateError";
-import { handlerValidationError } from "../helpers/handlerValidationError";
-import { handlerZodError } from "../helpers/handlerZodError";
+import { handleCastError } from "../errorHelpers/handleCastError";
+import { handlerDuplicateError } from "../errorHelpers/handleDuplicateError";
+import { handlerValidationError } from "../errorHelpers/handlerValidationError";
+import { handlerZodError } from "../errorHelpers/handlerZodError";
 import { TErrorSources } from "../interfaces/error.types";
 import { deleteImageFromCloudinary } from "../config/cloudinary.config";
 
