@@ -35,10 +35,10 @@ router.post(
   ParcelController.deleteParcel
 );
 
-// View all sender's parcels
+// Get all sender's parcels
 router.get("/me", checkAuth(Role.SENDER), ParcelController.getSenderParcels);
 
-// View a specific parcel by ID
+// Get a specific parcel by ID
 router.get(
   "/:id/status-log",
   checkAuth(Role.SENDER),
@@ -47,7 +47,7 @@ router.get(
 
 // <----------------PARCEL RECEIVER ROUTES ---------------->
 
-// View receiver's incoming parcels
+// Get receiver's incoming parcels
 router.get(
   "/me/incoming",
   checkAuth(Role.RECEIVER),
@@ -61,7 +61,7 @@ router.patch(
   ParcelController.confirmDelivery
 );
 
-// View delivery history
+// Get delivery history
 router.get(
   "/me/history",
   checkAuth(Role.RECEIVER),
@@ -70,7 +70,7 @@ router.get(
 
 // <----------------PARCEL ADMIN ROUTES ---------------->
 
-// View all parcels
+// Get all parcels
 router.get(
   "/",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
@@ -101,7 +101,7 @@ router.patch(
   ParcelController.blockStatusParcel
 );
 
-// View a specific parcel by ID with full details
+// Get a specific parcel by ID with full details
 router.get(
   "/:id/details",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
