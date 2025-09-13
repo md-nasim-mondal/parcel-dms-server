@@ -5,6 +5,7 @@ export enum Role {
   ADMIN = "admin",
   SENDER = "sender",
   RECEIVER = "receiver",
+  DELIVERY_PERSONNEL = "delivery_personnel",
 }
 
 //auth providers
