@@ -1,6 +1,6 @@
 export enum DiscountType {
-  PERCENTAGE = 'percentage',
-  FIXED = 'fixed',
+  PERCENTAGE = "percentage",
+  FIXED = "fixed",
 }
 
 export interface ICoupon {

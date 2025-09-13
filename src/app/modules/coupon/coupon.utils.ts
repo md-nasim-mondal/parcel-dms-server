@@ -4,8 +4,8 @@ import { DiscountType } from "./coupon.interface";
 import AppError from "../../errorHelpers/AppError";
 
 export function generateCouponCode(length = 8) {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let coupon = '';
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let coupon = "";
   for (let i = 0; i < length; i++) {
     coupon += chars.charAt(Math.floor(Math.random() * chars.length));
   }
@@ -16,30 +16,32 @@ export async function validateCoupon(code: string) {
   const coupon = await Coupon.findOne({ code: code });
 
   if (!coupon) {
-    return { valid: false, message: 'Invalid coupon code' };
+    return { valid: false, message: "Invalid coupon code" };
   }
 
   if (!coupon.isActive) {
-    return { valid: false, message: 'Coupon is not active' };
+    return { valid: false, message: "Coupon is not active" };
   }
 
   if (coupon.expiresAt && coupon.expiresAt < new Date()) {
-    return { valid: false, message: 'Coupon has expired' };
+    return { valid: false, message: "Coupon has expired" };
   }
 
   if (coupon?.usageLimit && (coupon?.usedCount ?? 0) >= coupon?.usageLimit) {
-    return { valid: false, message: 'Coupon has reached its usage limit' };
+    return { valid: false, message: "Coupon has reached its usage limit" };
   }
 
   return { valid: true, coupon: coupon };
 }
 
-
 export async function applyCoupon(couponCode: string, fee: number) {
   const { valid, coupon, message } = await validateCoupon(couponCode);
 
   if (!valid) {
-    throw new AppError(StatusCodes.BAD_REQUEST, message || 'Invalid coupon code');
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      message || "Invalid coupon code"
+    );
   }
 
   if (coupon?.discountType === DiscountType.PERCENTAGE) {
@@ -49,7 +51,7 @@ export async function applyCoupon(couponCode: string, fee: number) {
   }
 
   // Update coupon usage
-  if (coupon && typeof coupon.usedCount === 'number') {
+  if (coupon && typeof coupon.usedCount === "number") {
     coupon.usedCount++;
     await coupon.save();
   }
@@ -62,4 +64,3 @@ export async function applyCoupon(couponCode: string, fee: number) {
 
   return fee;
 }
-

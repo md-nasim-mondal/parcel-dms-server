@@ -13,7 +13,12 @@ import {
   type IParcel,
 } from "./parcel.interface";
 import { IsActive, Role } from "../user/user.interface";
-import { calculateParcelFee, expectedDeliveryDate, isValidStatusTransition, StatusTransitions } from "./parcel.utils";
+import {
+  calculateParcelFee,
+  expectedDeliveryDate,
+  isValidStatusTransition,
+  StatusTransitions,
+} from "./parcel.utils";
 import { Parcel } from "./parcel.model";
 import { Types } from "mongoose";
 import type { Document } from "mongoose";
@@ -112,18 +117,18 @@ const createParcel = async (payload: ICreateParcel, senderId: string) => {
   const parcelType = rest.type || ParcelType.PACKAGE;
   const shippingType = rest.shippingType || ShippingType.STANDARD;
 
-    if (rest.couponCode) {
-      await validateCoupon(rest.couponCode);
-    }
+  if (rest.couponCode) {
+    await validateCoupon(rest.couponCode);
+  }
   const calcParcelFeeWithoutDiscount = calculateParcelFee(
     weight,
     parcelType,
     shippingType
   );
 
-    const finalFee = rest.couponCode
-      ? await applyCoupon(rest.couponCode, calcParcelFeeWithoutDiscount)
-      : calcParcelFeeWithoutDiscount;
+  const finalFee = rest.couponCode
+    ? await applyCoupon(rest.couponCode, calcParcelFeeWithoutDiscount)
+    : calcParcelFeeWithoutDiscount;
 
   const estimatedDeliveryDate = expectedDeliveryDate(shippingType);
 

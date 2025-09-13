@@ -5,7 +5,6 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import { ParcelController } from "./parcel.controller";
 import { createParcelZodSchema } from "./parcel.validation";
 
-
 const router = Router();
 
 // --------------Parcel Sender Routes ---------------

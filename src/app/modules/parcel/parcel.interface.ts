@@ -12,7 +12,7 @@ export enum ParcelStatus {
   CANCELLED = "cancelled",
   BLOCKED = "blocked",
   FLAGGED = "flagged",
-  ON_Hold = "on-hold"
+  ON_Hold = "on-hold",
 }
 
 export enum ParcelType {
