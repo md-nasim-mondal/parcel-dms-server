@@ -39,7 +39,7 @@ const addStatusLog = (
   parcel.statusLog.push(statusLogEntry);
 };
 
-// For Parcel Sender Related Services
+// <--------------- PARCEL SENDER RELATED SERVICES --------------->
 const createParcel = async (payload: ICreateParcel, senderId: string) => {
   const trackingId = generateTrackingId();
 
@@ -314,12 +314,137 @@ const getParcelWithTrackingHistory = async (
   return cleanParcel;
 };
 
+// <------------------PARCEL RECEIVER SERVICES ------------------->
+
+const getIncomingParcels = async (
+  receiverId: string,
+  query: Record<string, string>
+) => {
+  const parcelQuery = new QueryBuilder(
+    Parcel.find({
+      receiver: receiverId,
+      currentStatus: {
+        $nin: [
+          ParcelStatus.DELIVERED,
+          ParcelStatus.FLAGGED,
+          ParcelStatus.RETURNED,
+          ParcelStatus.BLOCKED,
+          ParcelStatus.CANCELLED,
+        ],
+      },
+    })
+      .select(
+        "-weight -weightUnit -fee -couponCode -isPaid -isBlocked -sender -statusLog._id -statusLog.updatedBy -deliveryPersonnel"
+      )
+      .populate("sender", "name email phone -_id")
+      .populate("receiver", "name email phone _id"),
+    query
+  )
+    .search(["trackingId", "deliveryAddress", "pickupAddress"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const parcels = await parcelQuery.modelQuery;
+  const meta = await parcelQuery.getMeta();
+
+  return {
+    data: parcels,
+    meta,
+  };
+};
+
+const confirmDelivery = async (parcelId: string, receiverId: string) => {
+  const parcel = await Parcel.findOne({ _id: parcelId });
+
+  if (!parcel) {
+    throw new AppError(httpStatus.NOT_FOUND, "Parcel not found");
+  }
+
+  if (parcel.receiver.toString() !== receiverId) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to confirm this parcel"
+    );
+  }
+
+  if (parcel.currentStatus !== ParcelStatus.IN_TRANSIT) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Parcel must be In-Transit to confirm delivery"
+    );
+  }
+
+  // Update parcel status
+  parcel.currentStatus = ParcelStatus.DELIVERED;
+  parcel.deliveredAt = new Date();
+  parcel.cancelledAt = null;
+
+  addStatusLog(
+    parcel,
+    ParcelStatus.DELIVERED,
+    new Types.ObjectId(receiverId),
+    parcel?.deliveryAddress as string,
+    "Parcel status updated to delivered by receiver"
+  );
+
+  await parcel.save();
+
+  // Fetch the updated parcel with excluded fields for receiver
+  const cleanParcel = await Parcel.findById(parcel._id)
+    .select(
+      "-_id -weight -weightUnit -fee -couponCode -isPaid -isBlocked -sender -receiver -statusLog._id -statusLog.updatedBy -deliveryPersonnel"
+    )
+    .populate("sender", "name email phone -_id");
+
+  return cleanParcel;
+};
+
+const getDeliveryHistory = async (
+  receiverId: string,
+  query: Record<string, string>
+) => {
+  const parcelQuery = new QueryBuilder(
+    Parcel.find({
+      receiver: receiverId,
+      currentStatus: {
+        $in: [ParcelStatus.DELIVERED],
+      },
+    })
+      .select(
+        "-weight -weightUnit -fee -couponCode -isPaid -isBlocked -sender -receiver -statusLog._id -statusLog.updatedBy -deliveryPersonnel"
+      )
+      .populate("sender", "name email phone -_id")
+      .populate("receiver", "name email phone"),
+    query
+  )
+    .search(["trackingId", "deliveryAddress", "pickupAddress"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const parcels = await parcelQuery.modelQuery;
+  const meta = await parcelQuery.getMeta();
+
+  return {
+    data: parcels,
+    meta,
+  };
+};
+
 export const ParcelService = {
   // Parcel Sender Services
   createParcel,
   cancelParcel,
   deleteParcel,
   getSenderParcels,
+
+  // Receiver Services
+  getIncomingParcels,
+  confirmDelivery,
+  getDeliveryHistory,
 
   // Shared Services
   getParcelWithTrackingHistory,
