@@ -31,7 +31,7 @@ export interface IUser {
   password?: string;
   phone?: string;
   picture?: string;
-  address?: string;
+  defaultAddress?: string;
   isDeleted?: string;
   isActive?: IsActive;
   isVerified?: boolean;
