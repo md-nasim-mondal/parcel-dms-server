@@ -158,10 +158,10 @@ A **secure, modular, and role-based backend API** for a parcel delivery system (
 └── tsconfig.json
 ```
 
-
 ## 🚀 Setup Instructions
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - MongoDB
 - Redis (for session management)
@@ -170,22 +170,25 @@ A **secure, modular, and role-based backend API** for a parcel delivery system (
 ### Installation
 
 1. **Clone the repository:**
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/md-nasim-mondal/parcel-dms-server
 cd parcel-dms-server
 ```
 
 2. **Install dependencies:**
+
 ```bash
 npm install
 ```
 
 3. **Environment Setup:**
-Create a `.env` file in the root directory:
+   Create a `.env` file in the root directory:
+
 ```env
 NODE_ENV=development
 PORT=5000
-DATABASE_URL=mongodb://localhost:27017/parcel-delivery
+DATABASE_URL=mongodb://localhost:27017
 JWT_ACCESS_SECRET=your_jwt_access_secret
 JWT_REFRESH_SECRET=your_jwt_refresh_secret
 JWT_ACCESS_EXPIRES_IN=1d
@@ -199,11 +202,13 @@ SUPER_ADMIN_PASSWORD=admin123
 ```
 
 4. **Start the development server:**
+
 ```bash
 npm run dev
 ```
 
 5. **Build for production:**
+
 ```bash
 npm run build
 npm start
@@ -212,6 +217,7 @@ npm start
 ## 📋 API Endpoints
 
 ### Authentication Routes (`/api/v1/auth`)
+
 - `POST /register` - User registration
 - `POST /login` - User login
 - `POST /refresh-token` - Get new access token
@@ -221,6 +227,7 @@ npm start
 - `GET /google` - Google OAuth login
 
 ### User Routes (`/api/v1/users`)
+
 - `GET /` - Get all users (Admin only)
 - `GET /me` - Get current user profile
 - `GET /:id` - Get single user (Admin only)
@@ -229,6 +236,7 @@ npm start
 ### Parcel Routes (`/api/v1/parcels`)
 
 #### Sender Routes
+
 - `POST /` - Create parcel (Sender only)
 - `POST /cancel/:id` - Cancel parcel (Sender only)
 - `POST /delete/:id` - Delete parcel (Sender only)
@@ -236,11 +244,13 @@ npm start
 - `GET /:id/status-log` - Get parcel with history (Sender only)
 
 #### Receiver Routes
+
 - `GET /me/incoming` - Get incoming parcels (Receiver only)
 - `PATCH /confirm/:id` - Confirm delivery (Receiver only)
 - `GET /me/history` - Get delivery history (Receiver only)
 
 #### Admin Routes
+
 - `GET /` - Get all parcels (Admin only)
 - `POST /create-parcel` - Create parcel by admin (Admin only)
 - `PATCH /:id/delivery-status` - Update parcel status (Admin only)
@@ -248,29 +258,35 @@ npm start
 - `GET /:id/details` - Get parcel details (Admin only)
 
 #### Public Routes
+
 - `GET /tracking/:trackingId` - Track parcel by tracking ID
 
 ### OTP Routes (`/api/v1/otp`)
+
 - `POST /send` - Send OTP
 - `POST /verify` - Verify OTP
 
 ### Coupon Routes (`/api/v1/coupons`)
+
 - `POST /` - Create coupon (Admin only)
 - `GET /` - Get all coupons
 - `POST /apply` - Apply coupon
 
 ### Stats Routes (`/api/v1/stats`)
+
 - `GET /` - Get system statistics (Admin only)
 
 ## 🔒 Authentication & Authorization
 
 ### Roles
+
 - **SENDER**: Can create, cancel, and view their parcels
 - **RECEIVER**: Can view incoming parcels and confirm deliveries
 - **ADMIN**: Can manage users and parcels
 - **SUPER_ADMIN**: Full system access
 
 ### JWT Token Structure
+
 ```json
 {
   "userId": "user_id",
@@ -280,9 +296,10 @@ npm start
   "exp": 1234567890
 }
 ```
+
 ## 📦 Parcel Status Flow
 
-The parcel lifecycle goes through multiple stages. At each stage, certain exceptions such as **Cancel**, **Return**, **Reschedule**, **Flag**, **On Hold**, or **Blocked** may occur.  
+The parcel lifecycle goes through multiple stages. At each stage, certain exceptions such as **Cancel**, **Return**, **Reschedule**, **Flag**, **On Hold**, or **Blocked** may occur.
 
 ### 🔄 Main Flow
 
@@ -297,6 +314,7 @@ DISPATCHED → RETURNED
 IN_TRANSIT → RESCHEDULED
 
 ### ⚠️ Special Cases
+
 CANCELLED → FLAGGED → BLOCKED
 RETURNED → FLAGGED → BLOCKED
 RESCHEDULED → ON_HOLD → BLOCKED
@@ -304,29 +322,29 @@ RESCHEDULED → ON_HOLD → BLOCKED
 ---
 
 ### 📖 Status Explanation
-- **REQUESTED** → When the customer places an order.  
-- **APPROVED** → When the order is verified and approved by the seller/admin.  
-- **PICKED** → When the courier picks up the parcel.  
-- **DISPATCHED** → When the parcel is dispatched toward its destination.  
-- **IN_TRANSIT** → While the parcel is on the way.  
-- **DELIVERED** → When the parcel is successfully delivered to the customer.  
-- **CANCELLED / RETURNED / RESCHEDULED** → Possible exception states depending on customer or delivery issues.  
-- **FLAGGED / ON_HOLD / BLOCKED** → Security or policy-related statuses for further investigation.  
+
+- **REQUESTED** → When the customer places an order.
+- **APPROVED** → When the order is verified and approved by the seller/admin.
+- **PICKED** → When the courier picks up the parcel.
+- **DISPATCHED** → When the parcel is dispatched toward its destination.
+- **IN_TRANSIT** → While the parcel is on the way.
+- **DELIVERED** → When the parcel is successfully delivered to the customer.
+- **CANCELLED / RETURNED / RESCHEDULED** → Possible exception states depending on customer or delivery issues.
+- **FLAGGED / ON_HOLD / BLOCKED** → Security or policy-related statuses for further investigation.
 
 ---
 
 ✅ This flow clearly illustrates how a parcel progresses step by step and what exceptional cases may occur during the delivery process.
 
-
-
-
 ## 🎯 Parcel Features
 
 ### Tracking ID Format
+
 - Format: `TRK-YYYYMMDD-XXXXXX`
 - Example: `TRK-20241201-A1B2C3`
 
 ### Fee Calculation
+
 - Base fee: ৳50
 - Weight-based pricing:
   - Up to 500g: +৳50
@@ -336,12 +354,14 @@ RESCHEDULED → ON_HOLD → BLOCKED
   - 5kg-10kg: +৳400
 
 ### Parcel Types
+
 - `DOCUMENT`: No surcharge
 - `PACKAGE`: +৳10
 - `FRAGILE`: +৳25
 - `ELECTRONICS`: +৳40
 
 ### Shipping Types
+
 - `STANDARD`: No surcharge (5 days)
 - `EXPRESS`: +৳50 (2 days)
 - `OVERNIGHT`: +৳75 (1 day)
@@ -366,6 +386,7 @@ Use the provided Postman collection to test all endpoints. Import the collection
 ## 📝 Sample API Requests
 
 ### User Registration
+
 ```json
 POST /api/v1/auth/register
 {
@@ -379,6 +400,7 @@ POST /api/v1/auth/register
 ```
 
 ### Create Parcel
+
 ```json
 POST /api/v1/parcels
 {
@@ -395,6 +417,7 @@ POST /api/v1/parcels
 ```
 
 ### Track Parcel
+
 ```json
 GET /api/v1/parcels/tracking/TRK-20241201-A1B2C3
 ```
