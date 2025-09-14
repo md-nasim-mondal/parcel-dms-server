@@ -111,3 +111,5 @@ router.get(
 // <----------------PARCEL PUBLIC ROUTES ---------------->
 // Track a parcel by tracking ID with limited information
 router.get("/tracking/:trackingId", ParcelController.getParcelByTrackingId);
+
+export const ParcelRoutes = router;

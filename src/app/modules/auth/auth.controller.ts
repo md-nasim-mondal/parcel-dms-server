@@ -12,6 +12,24 @@ import { setAuthCookie } from "../../utils/setCookie";
 import { createUserTokens } from "../../utils/userTokens";
 import { AuthServices } from "./auth.service";
 
+const createUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await AuthServices.createUser(req.body);
+
+    // res.status(httpStatus.CREATED).json({
+    //     message: "User Created Successfully",
+    //     user
+    // })
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User Created Successfully",
+      data: user,
+    });
+  }
+);
+
 const credentialsLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // const loginInfo = await AuthServices.credentialsLogin(req.body)
@@ -137,10 +155,7 @@ const resetPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const decodedToken = req.user;
 
-    await AuthServices.resetPassword(
-      req.body,
-      decodedToken as JwtPayload
-    );
+    await AuthServices.resetPassword(req.body, decodedToken as JwtPayload);
 
     sendResponse(res, {
       success: true,
@@ -210,6 +225,7 @@ const googleCallbackController = catchAsync(
 );
 
 export const AuthControllers = {
+  createUser,
   credentialsLogin,
   getNewAccessToken,
   logout,

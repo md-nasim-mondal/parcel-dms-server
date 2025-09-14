@@ -39,28 +39,28 @@ export const createNewAccessTokenWithRefreshToken = async (
     envVars.JWT_REFRESH_SECRET
   ) as JwtPayload;
 
-  const isUserExist = await User.findOne({ email: verifiedRefreshToken.email });
+  const userIsExist = await User.findOne({ email: verifiedRefreshToken.email });
 
-  if (!isUserExist) {
+  if (!userIsExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "User does not exist");
   }
   if (
-    isUserExist.isActive === IsActive.BLOCKED ||
-    isUserExist.isActive === IsActive.INACTIVE
+    userIsExist.isActive === IsActive.BLOCKED ||
+    userIsExist.isActive === IsActive.INACTIVE
   ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      `User is ${isUserExist.isActive}`
+      `User is ${userIsExist.isActive}`
     );
   }
-  if (isUserExist.isDeleted) {
+  if (userIsExist.isDeleted) {
     throw new AppError(httpStatus.BAD_REQUEST, "User is deleted");
   }
 
   const jwtPayload = {
-    userId: isUserExist._id,
-    email: isUserExist.email,
-    role: isUserExist.role,
+    userId: userIsExist._id,
+    email: userIsExist.email,
+    role: userIsExist.role,
   };
   const accessToken = generateToken(
     jwtPayload,

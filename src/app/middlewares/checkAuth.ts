@@ -22,25 +22,25 @@ export const checkAuth =
         envVars.JWT_ACCESS_SECRET
       ) as JwtPayload;
 
-      const isUserExist = await User.findOne({ email: verifiedToken.email });
+      const userIsExist = await User.findOne({ email: verifiedToken.email });
 
-      if (!isUserExist) {
+      if (!userIsExist) {
         throw new AppError(httpStatus.BAD_REQUEST, "User does not exist");
       }
       if (
-        isUserExist.isActive === IsActive.BLOCKED ||
-        isUserExist.isActive === IsActive.INACTIVE
+        userIsExist.isActive === IsActive.BLOCKED ||
+        userIsExist.isActive === IsActive.INACTIVE
       ) {
         throw new AppError(
           httpStatus.BAD_REQUEST,
-          `User is ${isUserExist.isActive}`
+          `User is ${userIsExist.isActive}`
         );
       }
-      if (isUserExist.isDeleted) {
+      if (userIsExist.isDeleted) {
         throw new AppError(httpStatus.BAD_REQUEST, "User is deleted");
       }
 
-      if (!isUserExist.isVerified) {
+      if (!userIsExist.isVerified) {
         throw new AppError(httpStatus.BAD_REQUEST, "User is not verified!!");
       }
 

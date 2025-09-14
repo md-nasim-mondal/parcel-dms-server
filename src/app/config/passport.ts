@@ -19,34 +19,34 @@ passport.use(
     },
     async (email: string, password: string, done) => {
       try {
-        const isUserExist = await User.findOne({ email });
+        const userIsExist = await User.findOne({ email });
 
-        // if (!isUserExist) {
+        // if (!userIsExist) {
         //     return done(null, false, { message: "User does not exist" })
         // }
 
-        if (!isUserExist) {
+        if (!userIsExist) {
           return done("User does not exist");
         }
         if (
-          isUserExist.isActive === IsActive.BLOCKED ||
-          isUserExist.isActive === IsActive.INACTIVE
+          userIsExist.isActive === IsActive.BLOCKED ||
+          userIsExist.isActive === IsActive.INACTIVE
         ) {
-          return done(`User is ${isUserExist?.isActive}`);
+          return done(`User is ${userIsExist?.isActive}`);
         }
-        if (isUserExist.isDeleted) {
+        if (userIsExist.isDeleted) {
           return done("User is deleted");
         }
 
-        if (!isUserExist.isVerified) {
+        if (!userIsExist.isVerified) {
           return done("User is not verified!!");
         }
 
-        const isGoogleAuthenticated = isUserExist.auths.some(
+        const isGoogleAuthenticated = userIsExist.auths.some(
           (providerObjects) => providerObjects.provider == "google"
         );
 
-        if (isGoogleAuthenticated && !isUserExist.password) {
+        if (isGoogleAuthenticated && !userIsExist.password) {
           return done(null, false, {
             message:
               "You have authenticated through Google. So if you want to login with credentials, then at first login with google and set a password for your Gmail and then you can login with email and password.",
@@ -59,14 +59,14 @@ passport.use(
 
         const isPasswordMatched = await bcryptjs.compare(
           password as string,
-          isUserExist.password as string
+          userIsExist.password as string
         );
 
         if (!isPasswordMatched) {
           return done(null, false, { message: "Password does not match" });
         }
 
-        return done(null, isUserExist);
+        return done(null, userIsExist);
       } catch (error) {
         console.log(error);
         done(error);
@@ -95,30 +95,30 @@ passport.use(
           return done(null, false, { message: "No email found!" });
         }
 
-        let isUserExist = await User.findOne({ email });
+        let userIsExist = await User.findOne({ email });
 
-        if (isUserExist && !isUserExist.isVerified) {
+        if (userIsExist && !userIsExist.isVerified) {
           // throw new AppError(httpStatus.BAD_REQUEST, "User is not verified")
           // done("User is not verified")
           return done(null, false, { message: "User is not verified" });
         }
 
         if (
-          isUserExist &&
-          (isUserExist.isActive === IsActive.BLOCKED ||
-            isUserExist.isActive === IsActive.INACTIVE)
+          userIsExist &&
+          (userIsExist.isActive === IsActive.BLOCKED ||
+            userIsExist.isActive === IsActive.INACTIVE)
         ) {
-          // throw new AppError(httpStatus.BAD_REQUEST, `User is ${isUserExist.isActive}`)
-          done(`User is ${isUserExist.isActive}`);
+          // throw new AppError(httpStatus.BAD_REQUEST, `User is ${userIsExist.isActive}`)
+          done(`User is ${userIsExist.isActive}`);
         }
 
-        if (isUserExist && isUserExist.isDeleted) {
+        if (userIsExist && userIsExist.isDeleted) {
           return done(null, false, { message: "User is deleted" });
           // done("User is deleted")
         }
 
-        if (!isUserExist) {
-          isUserExist = await User.create({
+        if (!userIsExist) {
+          userIsExist = await User.create({
             email,
             name: profile.displayName,
             picture: profile.photos?.[0].value,
@@ -133,7 +133,7 @@ passport.use(
           });
         }
 
-        return done(null, isUserExist);
+        return done(null, userIsExist);
       } catch (error) {
         console.log("Google Strategy Error", error);
         return done(error);

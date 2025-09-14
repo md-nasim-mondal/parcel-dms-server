@@ -29,23 +29,7 @@ import { UserServices } from "./user.service";
 //         next(err)
 //     }
 // }
-const createUser = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = await UserServices.createUser(req.body);
 
-    // res.status(httpStatus.CREATED).json({
-    //     message: "User Created Successfully",
-    //     user
-    // })
-
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.CREATED,
-      message: "User Created Successfully",
-      data: user,
-    });
-  }
-);
 const updateUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
@@ -127,7 +111,6 @@ const getSingleUser = catchAsync(
 // function => try-catch catch => req-res function
 
 export const UserControllers = {
-  createUser,
   getAllUsers,
   getMe,
   updateUser,

@@ -8,7 +8,7 @@ import {
 import { Types } from "mongoose";
 import { createParcelZodSchema } from "../parcel/parcel.validation";
 
-// Only For Sender
+// ----------------- Coupon Schema (Sender Only) -----------------
 export const createCouponZodSchema = z.object({
   discountType: z
     .enum([...Object.values(DiscountType)] as [string, ...string[]], {
@@ -17,10 +17,13 @@ export const createCouponZodSchema = z.object({
     .refine((val) => val !== undefined, {
       message: "Discount type is required",
     }),
-  discountValue: z.number({
-    error: "Discount value is required",
-    message: "Discount value must be a number",
-  }),
+
+  discountValue: z
+    .number()
+    .refine((val) => typeof val === "number", {
+      message: "Discount value must be a number",
+    }),
+
   expiresAt: z
     .string()
     .min(1, { message: "Expiry date is required" })
@@ -28,71 +31,86 @@ export const createCouponZodSchema = z.object({
     .refine((date) => new Date(date) > new Date(), {
       message: "Expiry date must be in the future",
     }),
-  isActive: z
-    .boolean({
-      error: "isActive must be true or false",
-    })
-    .optional()
-    .default(true),
+
+  isActive: z.boolean().optional().default(true),
+
   usageLimit: z
-    .number({
-      error: "Usage limit must be a number",
-    })
+    .number()
     .int({ message: "Usage limit must be an integer" })
     .min(1, { message: "Usage limit must be at least 1" })
     .max(10000, { message: "Usage limit cannot exceed 10,000" })
     .optional(),
+
   usedCount: z
-    .number({
-      error: "Used count must be a number",
-    })
+    .number()
     .int({ message: "Used count must be an integer" })
     .min(0, { message: "Used count cannot be negative" })
     .optional()
     .default(0),
 });
 
-//Only For Admin
+// ----------------- Parcel Schema (Admin Create) -----------------
 export const createParcelByAdminZodSchema = createParcelZodSchema.extend({
   senderEmail: z
-    .string({ error: "Email must be string" })
-    .email({ message: "Invalid email address format." })
+    .string()
     .min(5, { message: "Email must be at least 5 characters long." })
-    .max(100, { message: "Email cannot exceed 100 characters." }),
+    .max(100, { message: "Email cannot exceed 100 characters." })
+    .email({ message: "Invalid email address format." })
+    .refine((val) => typeof val === "string", {
+      message: "Email must be string",
+    }),
 });
 
-// StatusLog schema
+// ----------------- Status Log Schema -----------------
 const StatusLogSchema = z.object({
-  status: z.enum(Object.values(ParcelStatus) as [string]),
+  status: z.enum(Object.values(ParcelStatus) as [string], {
+    message: "Invalid status value",
+  }),
   location: z.string().max(200).optional(),
   note: z.string().max(500).optional(),
   updatedBy: z
     .string()
-    .refine((val) => Types.ObjectId.isValid(val), "Invalid user id")
+    .refine((val) => Types.ObjectId.isValid(val), {
+      message: "Invalid user id",
+    })
     .optional(),
 });
 
-// Only Admin Can Update Parcel
+// ----------------- Parcel Update Schema (Admin) -----------------
 export const updateParcelSchemaAdmin = z.object({
   trackingId: z.string().optional(),
-  type: z.enum(Object.values(ParcelType) as [string]).optional(),
-  shippingType: z.enum(Object.values(ShippingType) as [string]).optional(),
+  type: z
+    .enum(Object.values(ParcelType) as [string], { message: "Invalid type" })
+    .optional(),
+  shippingType: z
+    .enum(Object.values(ShippingType) as [string], {
+      message: "Invalid shipping type",
+    })
+    .optional(),
   weight: z.number().optional(),
   weightUnit: z.string().optional(),
   fee: z.number().optional(),
   couponCode: z.string().nullable().optional(),
   estimatedDelivery: z.date().nullable().optional(),
-  currentStatus: z.enum(Object.values(ParcelStatus) as [string]).optional(),
+  currentStatus: z
+    .enum(Object.values(ParcelStatus) as [string], {
+      message: "Invalid status",
+    })
+    .optional(),
   currentLocation: z.string().nullable().optional(),
   isPaid: z.boolean().optional(),
   isBlocked: z.boolean().optional(),
   sender: z
     .string()
-    .refine((val) => Types.ObjectId.isValid(val), "Invalid sender id")
+    .refine((val) => Types.ObjectId.isValid(val), {
+      message: "Invalid sender id",
+    })
     .optional(),
   receiver: z
     .string()
-    .refine((val) => Types.ObjectId.isValid(val), "Invalid receiver id")
+    .refine((val) => Types.ObjectId.isValid(val), {
+      message: "Invalid receiver id",
+    })
     .optional(),
   pickupAddress: z.string().optional(),
   deliveryAddress: z.string().optional(),
@@ -100,7 +118,9 @@ export const updateParcelSchemaAdmin = z.object({
     .array(
       z
         .string()
-        .refine((val) => Types.ObjectId.isValid(val), "Invalid personnel id")
+        .refine((val) => Types.ObjectId.isValid(val), {
+          message: "Invalid personnel id",
+        })
     )
     .optional(),
   statusLog: z.array(StatusLogSchema).optional(),
@@ -108,18 +128,26 @@ export const updateParcelSchemaAdmin = z.object({
   cancelledAt: z.date().nullable().optional(),
 });
 
+// ----------------- Update Status Schema (Personnel) -----------------
 export const updateStatusPersonnelSchema = z.object({
-  currentStatus: z.enum(Object.values(ParcelStatus) as [string]).optional(),
+  currentStatus: z
+    .enum(Object.values(ParcelStatus) as [string], {
+      message: "Invalid status",
+    })
+    .optional(),
   currentLocation: z.string().nullable().optional(),
   deliveryPersonnelId: z
     .string()
-    .refine((val) => Types.ObjectId.isValid(val), "Invalid personnel id")
+    .refine((val) => Types.ObjectId.isValid(val), {
+      message: "Invalid personnel id",
+    })
     .optional(),
 });
 
+// ----------------- Update Blocked Status Schema -----------------
 export const updateBlockedStatusSchema = z.object({
-  isBlocked: z.boolean({
-    error: "isBlocked must be true or false",
+  isBlocked: z.boolean().refine((val) => typeof val === "boolean", {
+    message: "isBlocked must be true or false",
   }),
   reason: z.string().optional(),
 });
