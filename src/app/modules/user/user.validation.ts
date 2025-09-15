@@ -44,12 +44,18 @@ export const createUserZodSchema = z.object({
     })
     .optional(),
 
-  address: z
+  defaultAddress: z
     .string()
     .max(200, { message: "Address cannot exceed 200 characters." })
     .optional()
     .refine((val) => !val || typeof val === "string", {
       message: "Address must be string",
+    }),
+  role: z
+    .enum([Role.SENDER, Role.RECEIVER] as [string, ...string[]])
+    .optional()
+    .refine((val) => val === undefined || val === Role.SENDER || val === Role.RECEIVER, {
+      message: "Role must be either 'SENDER' or 'RECEIVER'",
     }),
 });
 
@@ -90,7 +96,7 @@ export const updateUserZodSchema = z.object({
       message: "isVerified must be true or false",
     }),
 
-  address: z
+  defaultAddress: z
     .string()
     .max(200, { message: "Address cannot exceed 200 characters." })
     .optional()

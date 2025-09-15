@@ -10,6 +10,7 @@ import { createNewAccessTokenWithRefreshToken } from "../../utils/userTokens";
 import { User } from "../user/user.model";
 import {
   IsActive,
+  Role,
   type IAuthProvider,
   type IUser,
 } from "../user/user.interface";
@@ -54,7 +55,11 @@ import { sendEmail } from "../../utils/sendEmail";
 // }
 
 const createUser = async (payload: Partial<IUser>) => {
-  const { email, password, ...rest } = payload;
+  const { email, password, role, ...rest } = payload;
+
+  if (![Role.SENDER, Role.RECEIVER].includes(role as Role)) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid role!");
+  }
 
   const userIsExist = await User.findOne({ email });
 

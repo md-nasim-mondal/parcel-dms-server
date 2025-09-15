@@ -13,7 +13,8 @@ const updateUser = async (
 ) => {
   if (
     decodedToken.role === Role.SENDER ||
-    decodedToken.role === Role.RECEIVER
+    decodedToken.role === Role.RECEIVER ||
+    decodedToken.role === Role.DELIVERY_PERSONNEL
   ) {
     if (userId !== decodedToken.userId) {
       throw new AppError(401, "You are not authorized!");
@@ -45,20 +46,22 @@ const updateUser = async (
   if (payload.role) {
     if (
       decodedToken.role === Role.SENDER ||
-      decodedToken.role === Role.RECEIVER
+      decodedToken.role === Role.RECEIVER ||
+      decodedToken.role === Role.DELIVERY_PERSONNEL
     ) {
       throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
     }
 
-    // if (payload.role === Role.SUPER_ADMIN && decodedToken.role === Role.ADMIN) {
-    //     throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
-    // }
+    if (payload.role === Role.SUPER_ADMIN && decodedToken.role === Role.ADMIN) {
+      throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
+    }
   }
 
   if (payload.isActive || payload.isDeleted || payload.isVerified) {
     if (
       decodedToken.role === Role.SENDER ||
-      decodedToken.role === Role.RECEIVER
+      decodedToken.role === Role.RECEIVER ||
+      decodedToken.role === Role.DELIVERY_PERSONNEL
     ) {
       throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
     }
