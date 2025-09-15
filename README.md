@@ -239,7 +239,7 @@ npm start
 
 - `POST /` - Create parcel (Sender only)
 - `POST /cancel/:id` - Cancel parcel (Sender only)
-- `POST /delete/:id` - Delete parcel (Sender only)
+- `DELETE /delete/:id` - Delete parcel (Sender only)
 - `GET /me` - Get sender's parcels (Sender only)
 - `GET /:id/status-log` - Get parcel with history (Sender only)
 

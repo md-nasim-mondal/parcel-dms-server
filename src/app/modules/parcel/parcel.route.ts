@@ -28,15 +28,15 @@ router.post(
   ParcelController.cancelParcel
 );
 
+// Get all sender's parcels
+router.get("/me", checkAuth(Role.SENDER), ParcelController.getSenderParcels);
+
 // delete a parcel
 router.delete(
   "/delete/:id",
   checkAuth(Role.SENDER),
   ParcelController.deleteParcel
 );
-
-// Get all sender's parcels
-router.get("/me", checkAuth(Role.SENDER), ParcelController.getSenderParcels);
 
 // Get a specific parcel by ID
 router.get(
@@ -54,18 +54,18 @@ router.get(
   ParcelController.getIncomingParcels
 );
 
-// Confirm delivery of a specific parcel by ID
-router.patch(
-  "/confirm/:id",
-  checkAuth(Role.RECEIVER),
-  ParcelController.confirmDelivery
-);
-
 // Get delivery history
 router.get(
   "/me/history",
   checkAuth(Role.RECEIVER),
   ParcelController.getDeliveryHistory
+);
+
+// Confirm delivery of a specific parcel by ID
+router.patch(
+  "/confirm/:id",
+  checkAuth(Role.RECEIVER),
+  ParcelController.confirmDelivery
 );
 
 // <----------------PARCEL ADMIN ROUTES ---------------->
