@@ -29,7 +29,7 @@ router.post(
 );
 
 // delete a parcel
-router.post(
+router.delete(
   "/delete/:id",
   checkAuth(Role.SENDER),
   ParcelController.deleteParcel
