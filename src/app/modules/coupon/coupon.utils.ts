@@ -4,7 +4,7 @@ import { DiscountType } from "./coupon.interface";
 import AppError from "../../errorHelpers/AppError";
 
 export function generateCouponCode(length = 8) {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const chars = "0123456789abcdefghijklmnopqrstuvwxyz";
   let coupon = "";
   for (let i = 0; i < length; i++) {
     coupon += chars.charAt(Math.floor(Math.random() * chars.length));
