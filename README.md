@@ -231,7 +231,7 @@ npm start
 - `GET /` - Get all users (Admin only)
 - `GET /me` - Get current user profile
 - `GET /:id` - Get single user (Admin only)
-- `PATCH /:id` - Update user profile
+- `PUT /:id` - Update user profile
 
 ### Parcel Routes (`/api/v1/parcels`)
 
