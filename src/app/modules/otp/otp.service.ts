@@ -1,15 +1,9 @@
-import crypto from "crypto";
 import httpStatus from "http-status-codes";
 import { redisClient } from "../../config/redis.config";
 import { sendEmail } from "../../utils/sendEmail";
 import { User } from "../user/user.model";
 import AppError from "../../errorHelpers/AppError";
-const OTP_EXPIRATION = 3 * 60; // 3minute
-
-const generateOtp = (length = 6) => {
-  const otp = crypto.randomInt(10 ** (length - 1), 10 ** length).toString();
-  return otp;
-};
+import { generateOtp, OTP_EXPIRATION } from "./otp.utils";
 
 const sendOTP = async (email: string, name: string) => {
   const user = await User.findOne({ email });

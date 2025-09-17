@@ -15,6 +15,8 @@ import {
   type IUser,
 } from "../user/user.interface";
 import { sendEmail } from "../../utils/sendEmail";
+import { generateOtp, OTP_EXPIRATION } from "../otp/otp.utils";
+import { redisClient } from "../../config/redis.config";
 
 // const credentialsLogin = async (payload: Partial<IUser>) => {
 //     const { email, password } = payload;
@@ -57,7 +59,12 @@ import { sendEmail } from "../../utils/sendEmail";
 const createUser = async (payload: Partial<IUser>) => {
   const { email, password, role, ...rest } = payload;
 
-  if (![Role.SENDER, Role.RECEIVER].includes(role as Role)) {
+  let userRole = "";
+  if (role === undefined) {
+    userRole = Role.SENDER;
+  }
+
+  if (![Role.SENDER, Role.RECEIVER].includes(userRole as Role)) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid role!");
   }
 
@@ -80,8 +87,30 @@ const createUser = async (payload: Partial<IUser>) => {
   const user = await User.create({
     email,
     password: hashedPassword,
+    role,
     auths: [authProvider],
     ...rest,
+  });
+
+  const otp = generateOtp();
+
+  const redisKey = `otp:${email}`;
+
+  await redisClient.set(redisKey, otp, {
+    expiration: {
+      type: "EX",
+      value: OTP_EXPIRATION,
+    },
+  });
+
+  await sendEmail({
+    to: user.email,
+    subject: "Your OTP Code",
+    templateName: "otp",
+    templateData: {
+      name: user.name,
+      otp: otp,
+    },
   });
 
   return user;
