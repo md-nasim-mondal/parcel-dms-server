@@ -4,6 +4,44 @@
 
 A **secure, modular, and role-based backend API** for a parcel delivery system (inspired by Pathao Courier or Sundarban) built with **Express.js**, **TypeScript**, and **Mongoose**. This system allows users to register as senders or receivers and perform parcel delivery operations such as **create parcel**, **track status**, and **cancel or receive parcels**.
 
+---
+
+Live Demo: [Parcel Delivery Management System](https://parcel-dms-server.vercel.app).
+
+Postman Collection: [Parcel Delivery Management System Postman Collection](https://github.com/md-nasim-mondal/parcel-dms-server/blob/main/Parcel%20DMS%20Server.postman_collection.json).
+
+## 🧱 Features
+
+- 🔐 Authentication: Email/password-based login using JWT.
+- 🔁 Role-based access (`SENDER`, `RECEIVER`, `ADMIN`, `SUPER_ADMIN`, `DELIVERY_PERSONNEL`)
+- 📦 Parcel lifecycle: Request, approve, picked, dispatch, deliver, block, cancel, flagged
+- 🔄 Status Tracking: Track status changes for each parcel.
+- 📲 OTP-based registration verification support
+- 🧱 Scalable Modular Architecture
+- 🎟️ Coupon support (only admin/super admin can create)
+- ⚠️ Global error and validation handling
+- 📧 Email notifications for OTP and password reset
+
+## 🧩 Tech Stack
+
+- **Node.js + Express** — Backend framework
+- **MongoDB + Mongoose** — NoSQL Database with ODM
+- **Zod** — Schema validation
+- **TypeScript** — Optional typing (if enabled)
+- **JWT** — Authentication
+- **SSL_Comerz** — For Future Payment System
+- **dotenv** — Config management
+- **Redis** — Caching and session management
+- **Redis** — Caching and session management
+- **EJS** — Email templating
+- **Postman** — API testing and documentation
+- **ESLint** — Code quality and linting
+- **Prettier** — Code formatting
+- **Nodemailer** — Email sending
+- **Vercel** — Deployment platform
+
+---
+
 ## ✨ Features Implemented
 
 ### 🔐 Authentication & Authorization
@@ -16,9 +54,6 @@ A **secure, modular, and role-based backend API** for a parcel delivery system (
 - Refresh token mechanism
 
 
-Live Demo: [Parcel Delivery System]().
-
-Postman Collection: [Parcel Delivery System Postman Collection]().
 
 ### 👥 User Management
 
