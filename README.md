@@ -42,6 +42,27 @@ Postman Collection: [Parcel Delivery Management System Postman Collection](https
 
 ---
 
+### 👤 Some Credentials For Checking:
+
+---
+
+```
+// SUPER_ADMIN
+email: "super@gmail.com",
+password: "12345@Mn"
+
+// SENDER
+email: "vilicab354@poesd.com",
+password: "12345@Mn"
+
+// RECEIVER
+email: "ciweto1555@ekuali.com",
+ password: "12345@Mn",
+
+```
+
+---
+
 ## ✨ Features Implemented
 
 ### 🔐 Authentication & Authorization
@@ -52,8 +73,6 @@ Postman Collection: [Parcel Delivery Management System Postman Collection](https
 - Google OAuth integration with Passport.js
 - OTP verification system
 - Refresh token mechanism
-
-
 
 ### 👥 User Management
 
@@ -231,7 +250,7 @@ PORT=5000
 DB_URL=mongodb://localhost:27017
 NODE_ENV=development
 
-#JWT 
+#JWT
 JWT_ACCESS_SECRET=your_jwt_access_secret
 JWT_REFRESH_SECRET=your_jwt_refresh_secret
 JWT_ACCESS_EXPIRES=1d
@@ -282,7 +301,7 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-# SMTP GMAIL Setup With Nodemailer 
+# SMTP GMAIL Setup With Nodemailer
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=465
 SMTP_USER=your_smtp_user_email_address
