@@ -18,50 +18,14 @@ import { sendEmail } from "../../utils/sendEmail";
 import { generateOtp, OTP_EXPIRATION } from "../otp/otp.utils";
 import { redisClient } from "../../config/redis.config";
 
-// const credentialsLogin = async (payload: Partial<IUser>) => {
-//     const { email, password } = payload;
-
-//     const userIsExist = await User.findOne({ email })
-
-//     if (!userIsExist) {
-//         throw new AppError(httpStatus.BAD_REQUEST, "Email does not exist")
-//     }
-
-//     const isPasswordMatched = await bcryptjs.compare(password as string, userIsExist.password as string)
-
-//     if (!isPasswordMatched) {
-//         throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password")
-//     }
-//     // const jwtPayload = {
-//     //     userId: userIsExist._id,
-//     //     email: userIsExist.email,
-//     //     role: userIsExist.role
-//     // }
-//     // const accessToken = generateToken(jwtPayload, envVars.JWT_ACCESS_SECRET, envVars.JWT_ACCESS_EXPIRES)
-
-//     // const refreshToken = generateToken(jwtPayload, envVars.JWT_REFRESH_SECRET, envVars.JWT_REFRESH_EXPIRES)
-
-//     const userTokens = createUserTokens(userIsExist)
-
-//     // delete userIsExist.password;
-
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//     const { password: pass, ...rest } = userIsExist.toObject()
-
-//     return {
-//         accessToken: userTokens.accessToken,
-//         refreshToken: userTokens.refreshToken,
-//         user: rest
-//     }
-
-// }
-
 const createUser = async (payload: Partial<IUser>) => {
   const { email, password, role, ...rest } = payload;
 
   let userRole = "";
   if (role === undefined) {
     userRole = Role.SENDER;
+  } else {
+    userRole = role;
   }
 
   if (![Role.SENDER, Role.RECEIVER].includes(userRole as Role)) {
