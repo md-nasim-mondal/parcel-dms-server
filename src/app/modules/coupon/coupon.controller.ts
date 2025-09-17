@@ -27,7 +27,7 @@ const getAllCoupons = catchAsync(
 
     sendResponse(res, {
       success: true,
-      statusCode: httpStatus.CREATED,
+      statusCode: httpStatus.OK,
       message: "All Coupons Retrieved Successfully",
       data: result.data,
       meta: result.meta,

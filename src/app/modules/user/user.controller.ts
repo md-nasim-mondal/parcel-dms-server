@@ -73,7 +73,7 @@ const getAllUsers = catchAsync(
     // })
     sendResponse(res, {
       success: true,
-      statusCode: httpStatus.CREATED,
+      statusCode: httpStatus.OK,
       message: "All Users Retrieved Successfully",
       data: result.data,
       meta: result.meta,
@@ -88,7 +88,7 @@ const getMe = catchAsync(
 
     sendResponse(res, {
       success: true,
-      statusCode: httpStatus.CREATED,
+      statusCode: httpStatus.OK,
       message: "Your Profile Retrieved Successfully",
       data: result.data,
     });
@@ -101,7 +101,7 @@ const getSingleUser = catchAsync(
     const result = await UserServices.getSingleUser(id);
     sendResponse(res, {
       success: true,
-      statusCode: httpStatus.CREATED,
+      statusCode: httpStatus.OK,
       message: "User Retrieved Successfully",
       data: result.data,
     });

@@ -59,7 +59,6 @@ const getAllCoupons = async (query: Record<string, string>) => {
     couponsData.build(),
     queryBuilder.getMeta(),
   ]);
-  console.log(data);
   return {
     data,
     meta,
