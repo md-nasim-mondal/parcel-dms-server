@@ -40,7 +40,7 @@ router.delete(
 
 // Get a specific parcel by ID
 router.get(
-  "/:id/status-log",
+  "/status-log/:id",
   checkAuth(Role.SENDER),
   ParcelController.getParcelWithHistory
 );
@@ -87,7 +87,7 @@ router.post(
 
 // Update a parcel delivery status and assign delivery personnel if needed
 router.patch(
-  "/:id/delivery-status",
+  "/delivery-status/:id",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   validateRequest(updateStatusPersonnelSchema),
   ParcelController.updateParcelStatus
@@ -95,7 +95,7 @@ router.patch(
 
 // Update a parcel's blocked status
 router.patch(
-  "/:id/block-status",
+  "/block-status/:id",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   validateRequest(updateBlockedStatusSchema),
   ParcelController.blockStatusParcel
@@ -103,7 +103,7 @@ router.patch(
 
 // Get a specific parcel by ID with full details
 router.get(
-  "/:id/details",
+  "/details/:id",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   ParcelController.getParcelById
 );

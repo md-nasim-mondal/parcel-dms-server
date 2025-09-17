@@ -233,7 +233,7 @@ npm start
 - `GET /:id` - Get single user (Admin only)
 - `PUT /:id` - Update user profile
 
-### Parcel Routes (`/api/v1/parcels`)
+### Parcel Routes (`/api/v1/parcel`)
 
 #### Sender Routes
 
@@ -241,7 +241,7 @@ npm start
 - `POST /cancel/:id` - Cancel parcel (Sender only)
 - `DELETE /delete/:id` - Delete parcel (Sender only)
 - `GET /me` - Get sender's parcels (Sender only)
-- `GET /:id/status-log` - Get parcel with history (Sender only)
+- `GET /status-log/:id` - Get parcel with history (Sender only)
 
 #### Receiver Routes
 
@@ -253,9 +253,9 @@ npm start
 
 - `GET /` - Get all parcels (Admin only)
 - `POST /create-parcel` - Create parcel by admin (Admin only)
-- `PATCH /:id/delivery-status` - Update parcel status (Admin only)
-- `PATCH /:id/block-status` - Block/unblock parcel (Admin only)
-- `GET /:id/details` - Get parcel details (Admin only)
+- `PATCH /delivery-status/:id` - Update parcel status (Admin only)
+- `PATCH /block-status/:id` - Block/unblock parcel (Admin only)
+- `GET /details/:id` - Get parcel details (Admin only)
 
 #### Public Routes
 
@@ -395,14 +395,14 @@ POST /api/v1/auth/register
   "password": "password123",
   "role": "SENDER",
   "phone": "+8801234567890",
-  "address": "123 Main St, Dhaka"
+  "defaultAddress": "123 Main St, Dhaka"
 }
 ```
 
-### Create Parcel
+### Create Parcel by Admin
 
 ```json
-POST /api/v1/parcels
+POST /api/v1/parcel
 {
   "receiverName": "Jane Smith",
   "receiverPhone": "+8801987654321",
@@ -419,7 +419,7 @@ POST /api/v1/parcels
 ### Track Parcel
 
 ```json
-GET /api/v1/parcels/tracking/TRK-20241201-A1B2C3
+GET /api/v1/parcel/tracking/TRK-20241201-A1B2C3
 ```
 
 ## 🔧 Development Scripts
