@@ -14,4 +14,10 @@ router.post(
   CouponController.createCoupon
 );
 
+router.get(
+  "/",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  CouponController.getAllCoupons
+);
+
 export const CouponRoutes = router;

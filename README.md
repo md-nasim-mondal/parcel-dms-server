@@ -15,6 +15,11 @@ A **secure, modular, and role-based backend API** for a parcel delivery system (
 - OTP verification system
 - Refresh token mechanism
 
+
+Live Demo: [Parcel Delivery System]().
+
+Postman Collection: [Parcel Delivery System Postman Collection]().
+
 ### 👥 User Management
 
 - User registration and login
@@ -188,17 +193,73 @@ npm install
 ```env
 NODE_ENV=development
 PORT=5000
-DATABASE_URL=mongodb://localhost:27017
+DB_URL=mongodb://localhost:27017
+NODE_ENV=development
+
+#JWT 
 JWT_ACCESS_SECRET=your_jwt_access_secret
 JWT_REFRESH_SECRET=your_jwt_refresh_secret
-JWT_ACCESS_EXPIRES_IN=1d
-JWT_REFRESH_EXPIRES_IN=30d
-BCRYPT_SALT_ROUNDS=12
-REDIS_URL=redis://localhost:6379
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-SUPER_ADMIN_EMAIL=admin@example.com
-SUPER_ADMIN_PASSWORD=admin123
+JWT_ACCESS_EXPIRES=1d
+JWT_REFRESH_EXPIRES=30d
+
+# BCRYPT
+BCRYPT_SALT_ROUNDS=your_bcrypt_salt_round
+
+
+#For Seed SUPER ADMIN
+SUPER_ADMIN_EMAIL=your_super_admin_email
+SUPER_ADMIN_PASSWORD=your_super_admin_password
+
+
+# Google
+GOOGLE_CLIENT_ID=your_google_Oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_Oauth_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:5000/api/v1/auth/google/callback
+
+# Express Session
+EXPRESS_SESSION_SECRET=express-session
+
+# Frontend URL
+FRONTEND_URL=http://localhost:5173
+
+
+#sslCommerz
+SSL_STORE_ID=your_ssl_store_id
+SSL_STORE_PASS=your_ssl_store_pass
+SSL_PAYMENT_API=ssl_payment_api
+SSL_VALIDATION_API=ssl_payment_validation_api
+SSL_IPN_URL=your_ipn_url
+
+
+# SSL Commerz BACKEND URLs
+SSL_SUCCESS_BACKEND_URL="http://localhost:5000/api/v1/payment/success"
+SSL_FAIL_BACKEND_URL="http://localhost:5000/api/v1/payment/fail"
+SSL_CANCEL_BACKEND_URL="http://localhost:5000/api/v1/payment/cancel"
+
+
+# SSL Commerz FRONTEND URLs
+SSL_SUCCESS_FRONTEND_URL="http://localhost:5173/payment/success"
+SSL_FAIL_FRONTEND_URL="http://localhost:5173/payment/fail"
+SSL_CANCEL_FRONTEND_URL="http://localhost:5173/payment/cancel"
+
+# CLOUDINARY Setup
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
+# SMTP GMAIL Setup With Nodemailer 
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=your_smtp_user_email_address
+SMTP_PASS=your_smtp_user_email_app_pass
+SMTP_FORM=your_smtp_user_email_address
+
+# Redis Setup
+REDIS_HOST=your_redis_host_url or redis://localhost:6379
+REDIS_PORT=13474
+REDIS_USERNAME=your_redis_username
+REDIS_PASSWORD=your_redis_password
+
 ```
 
 4. **Start the development server:**
@@ -233,7 +294,7 @@ npm start
 - `GET /:id` - Get single user (Admin only)
 - `PUT /:id` - Update user profile
 
-### Parcel Routes (`/api/v1/parcel`)
+### Parcel Routes (`/api/v1/parcels`)
 
 #### Sender Routes
 
@@ -270,11 +331,13 @@ npm start
 
 - `POST /` - Create coupon (Admin only)
 - `GET /` - Get all coupons
-- `POST /apply` - Apply coupon
+
+For applying coupons code you need to sendCoupon code as couponCode in parcel create time
 
 ### Stats Routes (`/api/v1/stats`)
 
-- `GET /` - Get system statistics (Admin only)
+- `GET /user` - Get system user statistics (Admin only)
+- `GET /parcel` - Get system parcel statistics (Admin only)
 
 ## 🔒 Authentication & Authorization
 
@@ -283,7 +346,7 @@ npm start
 - **SENDER**: Can create, cancel, and view their parcels
 - **RECEIVER**: Can view incoming parcels and confirm deliveries
 - **ADMIN**: Can manage users and parcels
-- **SUPER_ADMIN**: Full system access
+- **SUPER_ADMIN**: Full Admin system access and super admin can demoted a admin
 
 ### JWT Token Structure
 
@@ -402,7 +465,7 @@ POST /api/v1/auth/register
 ### Create Parcel by Admin
 
 ```json
-POST /api/v1/parcel
+POST /api/v1/parcels
 {
   "receiverName": "Jane Smith",
   "receiverPhone": "+8801987654321",

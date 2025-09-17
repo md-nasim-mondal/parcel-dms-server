@@ -1,0 +1,518 @@
+{
+	"info": {
+		"_postman_id": "f1813911-9514-46ac-b14d-931f14712544",
+		"name": "Parcel DMS Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "41700370",
+		"_collection_link": "https://dev-team-1068.postman.co/workspace/PH-Learning~3c911060-21a4-45d4-b0d5-3be304e2f761/collection/41700370-f1813911-9514-46ac-b14d-931f14712544?action=share&source=collection_link&creator=41700370"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgwNDA5MzgsImV4cCI6MTc1ODEyNzMzOH0.TS8AwmbfW8V_sXc02z6nHfjDfSRTh0_FSxd68CywUZw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:5000/api/v1/users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM2ZDg0MzI5ZjU1MGNkNDgwNjllMWUiLCJ1c2VyTmFtZSI6Ik1yLiBKaG9uIiwiZW1haWwiOiJ2aWxpY2FiMzU0QHBvZXNkLmNvbSIsInJvbGUiOiJzZW5kZXIiLCJpYXQiOjE3NTgwNDA4NDcsImV4cCI6MTc1ODEyNzI0N30.x5M7JiPEudknU50S0CI3NXiyy_5K7cMi2tQgNO_CQq4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:5000/api/v1/users/me"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "register user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Mr. Delivery Person\",\r\n    \"email\" : \"xipav90478@fanwn.com\",\r\n    \"password\": \"12345@Mn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"super@gmail.com\",\r\n    \"password\": \"12345@Mn\"\r\n}\r\n\r\n// {\r\n//     \"email\": \"vilicab354@poesd.com\",\r\n//     \"password\": \"12345@Mn\"\r\n// }\r\n\r\n// {\r\n//     \"email\" : \"ciweto1555@ekuali.com\",\r\n//     \"password\": \"12345@Mn\"\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "reset-password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM2ZDg0MzI5ZjU1MGNkNDgwNjllMWUiLCJ1c2VyTmFtZSI6Ik1yLiBKaG9uIiwiZW1haWwiOiJ2aWxpY2FiMzU0QHBvZXNkLmNvbSIsInJvbGUiOiJzZW5kZXIiLCJpYXQiOjE3NTc4NjQ0MTksImV4cCI6MTc1Nzk1MDgxOX0.Gv2iR1yGZqK9rwY7f3s8xFG94-1gUIx34o94Mp7tdxA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : \"68c6d84329f550cd48069e1e\",\r\n    \"newPassword\" : \"12345@Mn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/auth/reset-password"
+					},
+					"response": []
+				},
+				{
+					"name": "change-password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM2ZDg0MzI5ZjU1MGNkNDgwNjllMWUiLCJ1c2VyTmFtZSI6Ik1yLiBKaG9uIiwiZW1haWwiOiJ2aWxpY2FiMzU0QHBvZXNkLmNvbSIsInJvbGUiOiJzZW5kZXIiLCJpYXQiOjE3NTc4NjQ0MTksImV4cCI6MTc1Nzk1MDgxOX0.Gv2iR1yGZqK9rwY7f3s8xFG94-1gUIx34o94Mp7tdxA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\" : \"123456@Mn\",\r\n    \"newPassword\" : \"12345@Mn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/auth/change-password"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OTP",
+			"item": [
+				{
+					"name": "Send OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Mr. Jhon\",\r\n    \"email\" : \"vilicab354@poesd.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/otp/send"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"xipav90478@fanwn.com\",\r\n    \"otp\" : \"561273\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/otp/verify"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Parcel",
+			"item": [
+				{
+					"name": "For Sender",
+					"item": [
+						{
+							"name": "create parcel",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM2ZDg0MzI5ZjU1MGNkNDgwNjllMWUiLCJ1c2VyTmFtZSI6Ik1yLiBKaG9uIiwiZW1haWwiOiJ2aWxpY2FiMzU0QHBvZXNkLmNvbSIsInJvbGUiOiJzZW5kZXIiLCJpYXQiOjE3NTgwNDA4NDcsImV4cCI6MTc1ODEyNzI0N30.x5M7JiPEudknU50S0CI3NXiyy_5K7cMi2tQgNO_CQq4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"weight\": 9,\r\n    \"receiverEmail\": \"ciweto1555@ekuali.com\"\r\n    // \"couponCode\": \"MMCNYI3L\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/api/v1/parcels"
+							},
+							"response": []
+						},
+						{
+							"name": "Sender Status Log",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM2ZDg0MzI5ZjU1MGNkNDgwNjllMWUiLCJ1c2VyTmFtZSI6Ik1yLiBKaG9uIiwiZW1haWwiOiJ2aWxpY2FiMzU0QHBvZXNkLmNvbSIsInJvbGUiOiJzZW5kZXIiLCJpYXQiOjE3NTgwNDA4NDcsImV4cCI6MTc1ODEyNzI0N30.x5M7JiPEudknU50S0CI3NXiyy_5K7cMi2tQgNO_CQq4",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:5000/api/v1/parcels/status-log/68ca7a209a139b0b020f5613"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "For Receiver",
+					"item": [
+						{
+							"name": "receiver incoming parcel",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM4NTFkMDU1MTdlNzJmYjE0ZGI4YTkiLCJ1c2VyTmFtZSI6Ik1yLiBSZWNlaXZlciIsImVtYWlsIjoiY2l3ZXRvMTU1NUBla3VhbGkuY29tIiwicm9sZSI6InJlY2VpdmVyIiwiaWF0IjoxNzU4MTAwNDkxLCJleHAiOjE3NTgxODY4OTF9.pQMm-zZDK8gdE0zZe5qeDot30mcfucxtiJPjQ_m_lag",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:5000/api/v1/parcels/me/incoming"
+							},
+							"response": []
+						},
+						{
+							"name": "Receiver Parcel History",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM4NTFkMDU1MTdlNzJmYjE0ZGI4YTkiLCJ1c2VyTmFtZSI6Ik1yLiBSZWNlaXZlciIsImVtYWlsIjoiY2l3ZXRvMTU1NUBla3VhbGkuY29tIiwicm9sZSI6InJlY2VpdmVyIiwiaWF0IjoxNzU4MTAwNDkxLCJleHAiOjE3NTgxODY4OTF9.pQMm-zZDK8gdE0zZe5qeDot30mcfucxtiJPjQ_m_lag",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/v1/parcels/me/history?page",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"v1",
+										"parcels",
+										"me",
+										"history"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Receiver Confirm Delivery",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM4NTFkMDU1MTdlNzJmYjE0ZGI4YTkiLCJ1c2VyTmFtZSI6Ik1yLiBSZWNlaXZlciIsImVtYWlsIjoiY2l3ZXRvMTU1NUBla3VhbGkuY29tIiwicm9sZSI6InJlY2VpdmVyIiwiaWF0IjoxNzU4MTAwNDkxLCJleHAiOjE3NTgxODY4OTF9.pQMm-zZDK8gdE0zZe5qeDot30mcfucxtiJPjQ_m_lag",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:5000/api/v1/parcels/confirm/68ca7a209a139b0b020f5613"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "For Admin",
+					"item": [
+						{
+							"name": "Get All Parcels",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgwNDA5MzgsImV4cCI6MTc1ODEyNzMzOH0.TS8AwmbfW8V_sXc02z6nHfjDfSRTh0_FSxd68CywUZw",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:5000/api/v1/parcels"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Parcel By Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgwNDA5MzgsImV4cCI6MTc1ODEyNzMzOH0.TS8AwmbfW8V_sXc02z6nHfjDfSRTh0_FSxd68CywUZw",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:5000/api/v1/parcels/details/68ca7a209a139b0b020f5613"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Status and Personnel",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgwNDA5MzgsImV4cCI6MTc1ODEyNzMzOH0.TS8AwmbfW8V_sXc02z6nHfjDfSRTh0_FSxd68CywUZw",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    // \"currentLocation\": \"Some st 2\"\r\n    \"currentStatus\": \"in-transit\"\r\n    // \"deliveryPersonnelId\": \"68ca9515cd3fcd1818b93892\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/api/v1/parcels/delivery-status/68ca7a209a139b0b020f5613"
+							},
+							"response": []
+						},
+						{
+							"name": "Block Parcel",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{   \r\n    \"isBlocked\": true,\r\n    \"reason\": \"restricted item\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/api/v1/parcels/block-status/688aa650abd0e1c765a379e4"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Parcel by Admin",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgxMDgwOTksImV4cCI6MTc1ODE5NDQ5OX0.bJY6KhAr2dOs7qGCH05OMm4spqiwOi8EVo5BnkaFi-0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"senderEmail\": \"vilicab354@poesd.com\",\r\n    \"receiverEmail\" : \"ciweto1555@ekuali.com\",\r\n    \"pickupAddress\": \"121 pine st\",\r\n    \"deliveryAddress\": \"550 atlanta ave\",\r\n    \"weight\": 4\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:5000/api/v1/parcels/create-parcel"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "For Public",
+					"item": [
+						{
+							"name": "Public Parcel by trackingId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:5000/api/v1/parcels/tracking/TRK-20250917-FMV3DK"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Sender Parcels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGM2ZDg0MzI5ZjU1MGNkNDgwNjllMWUiLCJ1c2VyTmFtZSI6Ik1yLiBKaG9uIiwiZW1haWwiOiJ2aWxpY2FiMzU0QHBvZXNkLmNvbSIsInJvbGUiOiJzZW5kZXIiLCJpYXQiOjE3NTgwNDA4NDcsImV4cCI6MTc1ODEyNzI0N30.x5M7JiPEudknU50S0CI3NXiyy_5K7cMi2tQgNO_CQq4",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/api/v1/parcels/me"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coupon",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{vault:json-web-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"discountType\": \"percentage\",\r\n  \"discountValue\": 10,\r\n  \"expiresAt\": \"2025-09-30T05:33:00.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/v1/coupons"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Coupons",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgxMDgwOTksImV4cCI6MTc1ODE5NDQ5OX0.bJY6KhAr2dOs7qGCH05OMm4spqiwOi8EVo5BnkaFi-0",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/api/v1/coupons"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stats",
+			"item": [
+				{
+					"name": "Get Parcels Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgxMDgwOTksImV4cCI6MTc1ODE5NDQ5OX0.bJY6KhAr2dOs7qGCH05OMm4spqiwOi8EVo5BnkaFi-0",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/api/v1/stats/parcel"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGMxN2NjZjY0ODYxM2RjMzM0ZGViZTQiLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiZW1haWwiOiJzdXBlckBnbWFpbC5jb20iLCJyb2xlIjoic3VwZXJfYWRtaW4iLCJpYXQiOjE3NTgxMDgwOTksImV4cCI6MTc1ODE5NDQ5OX0.bJY6KhAr2dOs7qGCH05OMm4spqiwOi8EVo5BnkaFi-0",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/api/v1/stats/user"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

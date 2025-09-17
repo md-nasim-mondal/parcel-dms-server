@@ -6,7 +6,7 @@ import { StatsController } from "./stats.controller";
 const router = express.Router();
 
 router.get(
-  "/parcels",
+  "/parcel",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   StatsController.getParcelsStats
 );

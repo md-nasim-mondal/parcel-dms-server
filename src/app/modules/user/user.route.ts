@@ -8,7 +8,7 @@ import { updateUserZodSchema } from "./user.validation";
 const router = Router();
 
 router.get(
-  "/all-users",
+  "/",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   UserControllers.getAllUsers
 );

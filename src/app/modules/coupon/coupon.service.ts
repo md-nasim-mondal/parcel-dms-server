@@ -3,6 +3,8 @@ import { Coupon } from "./coupon.model";
 import { DiscountType, ICoupon } from "./coupon.interface";
 import { generateCouponCode } from "./coupon.utils";
 import AppError from "../../errorHelpers/AppError";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import { couponSearchableFields } from "./coupon.constant";
 
 const createCoupon = async (payload: ICoupon) => {
   const { discountType, discountValue, expiresAt, ...rest } = payload;
@@ -44,7 +46,27 @@ const createCoupon = async (payload: ICoupon) => {
   return coupon;
 };
 
+const getAllCoupons = async (query: Record<string, string>) => {
+  const queryBuilder = new QueryBuilder(Coupon.find(), query);
+  const couponsData = queryBuilder
+    .filter()
+    .search(couponSearchableFields)
+    .sort()
+    .fields()
+    .paginate();
+
+  const [data, meta] = await Promise.all([
+    couponsData.build(),
+    queryBuilder.getMeta(),
+  ]);
+  console.log(data);
+  return {
+    data,
+    meta,
+  };
+};
+
 export const CouponService = {
   createCoupon: createCoupon,
-  // Other coupon related services can be added here
+  getAllCoupons,
 };

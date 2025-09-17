@@ -14,7 +14,7 @@ const moduleRoutes = [
     route: AuthRoutes,
   },
   {
-    path: "/user",
+    path: "/users",
     route: UserRoutes,
   },
   {
@@ -22,11 +22,11 @@ const moduleRoutes = [
     route: OtpRoutes,
   },
   {
-    path: "/parcel",
+    path: "/parcels",
     route: ParcelRoutes,
   },
   {
-    path: "/coupon",
+    path: "/coupons",
     route: CouponRoutes,
   },
   {
