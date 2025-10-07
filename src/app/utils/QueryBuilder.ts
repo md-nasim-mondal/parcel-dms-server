@@ -18,7 +18,7 @@ export class QueryBuilder<T> {
       delete filter[field];
     }
 
-    // FIX 1: খালি মানযুক্ত ফিল্ডগুলো বাদ দিন
+    // FIX 1: remove empty filed
     Object.keys(filter).forEach((key) => {
       if (!filter[key]) {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -26,7 +26,18 @@ export class QueryBuilder<T> {
       }
     });
 
-    this.modelQuery = this.modelQuery.find(filter);
+    // Build case-insensitive regex filters for string fields
+    const caseInsensitiveFilter: Record<string, string | { $regex: RegExp } | number | boolean | null | undefined> = {};
+    Object.keys(filter).forEach((key) => {
+      const value = filter[key];
+      if (typeof value === "string") {
+        caseInsensitiveFilter[key] = { $regex: new RegExp(`^${value}$`, "i") };
+      } else {
+        caseInsensitiveFilter[key] = value;
+      }
+    });
+
+    this.modelQuery = this.modelQuery.find(caseInsensitiveFilter);
 
     return this;
   }
@@ -34,7 +45,7 @@ export class QueryBuilder<T> {
   search(searchableField: string[]): this {
     const searchTerm = this.query.searchTerm;
 
-    // FIX 2: কেবল searchTerm থাকলে কুয়েরি চালান
+    // FIX 2: if searchTerm than used search query
     if (searchTerm) {
       const searchQuery = {
         $or: searchableField.map((field) => ({
