@@ -5,13 +5,13 @@ import { Role } from "../user/user.interface";
 import { AuthControllers } from "./auth.controller";
 import { envVars } from "../../config/env";
 import { validateRequest } from "../../middlewares/validateRequest";
-import { createUserZodSchema } from "../user/user.validation";
+import { createSenderReceiverZodSchema } from "../user/user.validation";
 
 const router = Router();
 
 router.post(
   "/register",
-  validateRequest(createUserZodSchema),
+  validateRequest(createSenderReceiverZodSchema),
   AuthControllers.createUser
 );
 router.post("/login", AuthControllers.credentialsLogin);

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { UserServices } from "./user.service";
+import { IsActive } from "./user.interface";
 
 // const createUserFunction = async (req: Response, res: Response) => {
 
@@ -108,6 +108,57 @@ const getSingleUser = catchAsync(
   }
 );
 
+const createAdmin = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const decodedToken = req.user as JwtPayload;
+    const user = await UserServices.createAdmin(req.body, decodedToken);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Admin Created Successfully",
+      data: user,
+    });
+  }
+);
+
+const createDeliveryPersonnel = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await UserServices.createDeliveryPersonnel(req.body);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Delivery Personnel Created Successfully",
+      data: user,
+    });
+  }
+);
+
+const blockStatusUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.id;
+    const { isActive } = req.body;
+
+    console.log(userId, req.body);
+
+    const result = await UserServices.blockStatusUser(userId, isActive);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: `User ${
+        isActive === IsActive.BLOCKED
+          ? "Blocked"
+          : isActive === IsActive.INACTIVE
+          ? "Inactive"
+          : "Activated"
+      } Successfully`,
+      data: result,
+    });
+  }
+);
+
 // function => try-catch catch => req-res function
 
 export const UserControllers = {
@@ -115,6 +166,9 @@ export const UserControllers = {
   getMe,
   updateUser,
   getSingleUser,
+  createAdmin,
+  createDeliveryPersonnel,
+  blockStatusUser,
 };
 
 // route matching -> controller -> service -> model -> DB

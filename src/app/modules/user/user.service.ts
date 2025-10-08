@@ -1,10 +1,12 @@
+import  bcryptjs from "bcryptjs";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import AppError from "../../errorHelpers/AppError";
-import { IUser, Role } from "./user.interface";
+import { IUser, Role, IsActive } from "./user.interface";
 import { User } from "./user.model";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import { userSearchableFields } from "./user.constant";
+import { envVars } from "../../config/env";
 
 const updateUser = async (
   userId: string,
@@ -107,9 +109,92 @@ const getMe = async (userId: string) => {
   };
 };
 
+const createAdmin = async (
+  payload: Partial<IUser>,
+  decodedToken: JwtPayload
+) => {
+  const { email, password, role, ...rest } = payload;
+
+  const isUserExist = await User.findOne({ email });
+
+  if (isUserExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
+  }
+
+  if (decodedToken.role == Role.ADMIN && role === Role.SUPER_ADMIN) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to create SUPER_ADMIN"
+    );
+  }
+
+  const hashedPassword = await bcryptjs.hash(
+    password as string,
+    Number(envVars.BCRYPT_SALT_ROUND)
+  );
+
+  const user = await User.create({
+    email,
+    password: hashedPassword,
+    role: Role.ADMIN,
+    ...rest,
+  });
+
+  return user;
+};
+const createDeliveryPersonnel = async (payload: Partial<IUser>) => {
+  const { email, password, ...rest } = payload;
+
+  const isUserExist = await User.findOne({ email });
+  if (isUserExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
+  }
+
+  const hashedPassword = await bcryptjs.hash(
+    password as string,
+    Number(envVars.BCRYPT_SALT_ROUND)
+  );
+
+  const user = await User.create({
+    email,
+    password: hashedPassword,
+    role: Role.DELIVERY_PERSONNEL,
+    ...rest,
+  });
+
+  return user;
+};
+
+const blockStatusUser = async (userId: string, isActive: IsActive) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  // check payload status and isActive same
+  if (user.isActive === isActive) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `User is already in this ${isActive} status`
+    );
+  }
+  user.isActive = isActive;
+  if (isActive === IsActive.ACTIVE) {
+    user.isActive = IsActive.BLOCKED;
+  } else if (isActive === IsActive.INACTIVE) {
+    user.isActive = IsActive.INACTIVE;
+  } else {
+    user.isActive = IsActive.ACTIVE;
+  }
+  await user.save();
+  return user;
+};
+
 export const UserServices = {
   getAllUsers,
   updateUser,
   getSingleUser,
   getMe,
+  createAdmin,
+  createDeliveryPersonnel,
+  blockStatusUser,
 };

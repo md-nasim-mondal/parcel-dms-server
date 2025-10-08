@@ -47,6 +47,10 @@ export const createUserZodSchema = z.object({
     .refine((val) => !val || typeof val === "string", {
       message: "Address must be string",
     }),
+});
+
+
+export const createSenderReceiverZodSchema = createUserZodSchema.extend({
   role: z
     .enum([Role.SENDER, Role.RECEIVER] as [string, ...string[]])
     .optional()
@@ -59,6 +63,13 @@ export const createUserZodSchema = z.object({
     ),
 });
 
+export const createAdminZodSchema = createUserZodSchema.extend({
+  role: z.enum([Role.ADMIN, Role.SUPER_ADMIN] as [string, ...string[]]),
+});
+
+export const createDeliveryPersonnelZodSchema = createUserZodSchema.extend({
+  role: z.enum([Role.DELIVERY_PERSONNEL] as [string]),
+});
 // ----------------- Update User Schema -----------------
 export const updateUserZodSchema = z.object({
   name: z
@@ -87,4 +98,8 @@ export const updateUserZodSchema = z.object({
     .refine((val) => !val || typeof val === "string", {
       message: "Address must be string",
     }),
+});
+
+export const updateUserBlockedStatusSchema = z.object({
+  isActive: z.enum(Object.values(IsActive) as [string]),
 });
