@@ -1,5 +1,5 @@
 import { Query } from "mongoose";
-import { excludeField } from "../constants"; 
+import { excludeField } from "../constants";
 
 export class QueryBuilder<T> {
   public modelQuery: Query<T[], T>;
@@ -26,18 +26,25 @@ export class QueryBuilder<T> {
       }
     });
 
-    // Build case-insensitive regex filters for string fields
-    const caseInsensitiveFilter: Record<string, string | { $regex: RegExp } | number | boolean | null | undefined> = {};
+    const caseInsensitiveFilter: Record<string, unknown> = {};
     Object.keys(filter).forEach((key) => {
       const value = filter[key];
-      if (typeof value === "string") {
+
+      // isVerified ফিল্ডটিকে বিশেষভাবে হ্যান্ডেল করুন
+      if (key === "isVerified") {
+        caseInsensitiveFilter[key] = value === "true"; // স্ট্রিং "true" কে boolean true তে কনভার্ট করুন
+      } else if (typeof value === "string") {
+        // অন্যান্য স্ট্রিং ফিল্ডের জন্য আগের মতোই regex ব্যবহার করুন
         caseInsensitiveFilter[key] = { $regex: new RegExp(`^${value}$`, "i") };
       } else {
+        // অন্য কোনো টাইপ থাকলে সরাসরি সেট করুন
         caseInsensitiveFilter[key] = value;
       }
     });
 
-    this.modelQuery = this.modelQuery.find(caseInsensitiveFilter);
+    this.modelQuery = this.modelQuery.find(
+      caseInsensitiveFilter as Record<string, unknown>
+    );
 
     return this;
   }
