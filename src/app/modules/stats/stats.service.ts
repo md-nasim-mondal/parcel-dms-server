@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Types } from "mongoose";
+import { ParcelStatus } from "../parcel/parcel.interface";
 import { Parcel } from "../parcel/parcel.model";
 import { IsActive } from "../user/user.interface";
 import { User } from "../user/user.model";
@@ -168,7 +170,170 @@ const getParcelsStats = async () => {
   };
 };
 
+const getSenderStats = async (senderId: string) => {
+  // Ensure senderId is treated as ObjectId in queries
+  const senderObjectId = new Types.ObjectId(senderId);
+
+  // Total parcels sent by this sender
+  const totalParcelsPromise = Parcel.countDocuments({ sender: senderObjectId });
+
+  // Parcels grouped by status
+  const parcelsByStatusPromise = Parcel.aggregate([
+    { $match: { sender: senderObjectId } },
+    {
+      $group: {
+        _id: "$currentStatus",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // Parcels grouped by type
+  const parcelsByTypePromise = Parcel.aggregate([
+    { $match: { sender: senderObjectId } },
+    {
+      $group: {
+        _id: "$type",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // Parcels grouped by shippingType
+  const parcelsByShippingTypePromise = Parcel.aggregate([
+    { $match: { sender: senderObjectId } },
+    {
+      $group: {
+        _id: "$shippingType",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // Average fee of sent parcels
+  const avgFeePromise = Parcel.aggregate([
+    { $match: { sender: senderObjectId } },
+    {
+      $group: {
+        _id: null,
+        avgFee: { $avg: "$fee" },
+      },
+    },
+  ]);
+
+  // Parcels created in last 7, 14, 30 days
+  const parcelsLast7DaysPromise = Parcel.countDocuments({
+    sender: senderObjectId,
+    createdAt: { $gte: sevenDaysAgo },
+  });
+  const parcelsLast14DaysPromise = Parcel.countDocuments({
+    sender: senderObjectId,
+    createdAt: { $gte: fourteenDaysAgo },
+  });
+  const parcelsLast30DaysPromise = Parcel.countDocuments({
+    sender: senderObjectId,
+    createdAt: { $gte: thirtyDaysAgo },
+  });
+
+  // Unique receivers this sender has sent to
+  const uniqueReceiversPromise = Parcel.distinct("receiver", {
+    sender: senderObjectId,
+  }).then((arr: any[]) => arr.length);
+
+  // Count of parcels per receiver
+  const parcelsPerReceiverPromise = Parcel.aggregate([
+    { $match: { sender: senderObjectId } },
+    {
+      $group: {
+        _id: "$receiver",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const [
+    totalParcels,
+    parcelsByStatus,
+    parcelsByType,
+    parcelsByShippingType,
+    avgFee,
+    parcelsLast7Days,
+    parcelsLast14Days,
+    parcelsLast30Days,
+    uniqueReceivers,
+    parcelsPerReceiver,
+  ] = await Promise.all([
+    totalParcelsPromise,
+    parcelsByStatusPromise,
+    parcelsByTypePromise,
+    parcelsByShippingTypePromise,
+    avgFeePromise,
+    parcelsLast7DaysPromise,
+    parcelsLast14DaysPromise,
+    parcelsLast30DaysPromise,
+    uniqueReceiversPromise,
+    parcelsPerReceiverPromise,
+  ]);
+
+  return {
+    totalParcels,
+    parcelsByStatus,
+    parcelsByType,
+    parcelsByShippingType,
+    avgFee: avgFee[0]?.avgFee ?? 0,
+    parcelsLast7Days,
+    parcelsLast14Days,
+    parcelsLast30Days,
+    uniqueReceivers,
+    parcelsPerReceiver,
+  };
+};
+
+const getReceiverStats = async (receiverId: string) => {
+  const totalIncomingParcelsPromise = Parcel.countDocuments({
+    receiver: receiverId,
+    currentStatus: {
+      $nin: [
+        ParcelStatus.DELIVERED,
+        ParcelStatus.FLAGGED,
+        ParcelStatus.RETURNED,
+        ParcelStatus.BLOCKED,
+        ParcelStatus.CANCELLED,
+      ],
+    },
+  });
+
+  const totalInTransitParcelsPromise = Parcel.countDocuments({
+    receiver: receiverId,
+    currentStatus: ParcelStatus.IN_TRANSIT,
+  });
+  const totalDeliveredParcelsPromise = Parcel.countDocuments({
+    receiver: receiverId,
+    currentStatus: ParcelStatus.DELIVERED,
+  });
+
+  const [totalIncomingParcels, totalDeliveredParcels, totalInTransitParcels] =
+    await Promise.all([
+      totalIncomingParcelsPromise,
+      totalDeliveredParcelsPromise,
+      totalInTransitParcelsPromise,
+    ]);
+
+  return {
+    totalIncomingParcels,
+    totalDeliveredParcels,
+    totalInTransitParcels,
+  };
+};
+
 export const StatsService = {
+  // system stats for admin
   getParcelsStats,
   getUserStats,
+
+  // receiver stats for receiver
+  getReceiverStats,
+
+  // sender stats for sender
+  getSenderStats,
 };

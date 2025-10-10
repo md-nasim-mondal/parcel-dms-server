@@ -68,7 +68,7 @@ router.patch(
   ParcelController.confirmDelivery
 );
 
-// <----------------PARCEL ADMIN ROUTES ---------------->
+// <---------------- PARCEL ADMIN ROUTES ---------------->
 
 // Get all parcels
 router.get(
