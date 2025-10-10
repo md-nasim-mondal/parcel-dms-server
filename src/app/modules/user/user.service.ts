@@ -178,7 +178,7 @@ const blockStatusUser = async (userId: string, isActive: IsActive) => {
     );
   }
   user.isActive = isActive;
-  if (isActive === IsActive.ACTIVE) {
+  if (isActive === IsActive.BLOCKED) {
     user.isActive = IsActive.BLOCKED;
   } else if (isActive === IsActive.INACTIVE) {
     user.isActive = IsActive.INACTIVE;
