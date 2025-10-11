@@ -140,7 +140,9 @@ const blockStatusUser = catchAsync(
     const userId = req.params.id;
     const { isActive } = req.body;
 
-    const result = await UserServices.blockStatusUser(userId, isActive);
+    const verifiedToken = req.user;
+
+    const result = await UserServices.blockStatusUser(userId, isActive, verifiedToken as JwtPayload);
 
     sendResponse(res, {
       success: true,

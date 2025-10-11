@@ -1,4 +1,4 @@
-import  bcryptjs from "bcryptjs";
+import bcryptjs from "bcryptjs";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import AppError from "../../errorHelpers/AppError";
@@ -13,6 +13,7 @@ const updateUser = async (
   payload: Partial<IUser>,
   decodedToken: JwtPayload
 ) => {
+  // 1. Non-admin users can only update their own profile
   if (
     decodedToken.role === Role.SENDER ||
     decodedToken.role === Role.RECEIVER ||
@@ -24,28 +25,26 @@ const updateUser = async (
   }
 
   const ifUserExist = await User.findById(userId);
-
   if (!ifUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
   }
 
+  // 2. Admin / Super Admin cannot touch another Super-Admin
   if (
-    decodedToken.role === Role.ADMIN &&
-    ifUserExist.role === Role.SUPER_ADMIN
+    (decodedToken.role === Role.ADMIN ||
+      decodedToken.role === Role.SUPER_ADMIN) &&
+    ifUserExist.role === Role.SUPER_ADMIN &&
+    userId !== decodedToken.userId
   ) {
-    throw new AppError(401, "You are not authorized!");
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "Admin / Super Admin cannot change another Super Admin's role"
+    );
   }
 
-  /**
-   * email - can not update
-   * name, phone, password address
-   * password - re hashing
-   *  only admin superadmin - role, isDeleted...
-   *
-   * promoting to superadmin - superadmin
-   */
-
-  if (payload.role) {
+  // 3. Role change validations
+  if (payload.role !== undefined) {
+    // Only Admin & Super-Admin can change roles
     if (
       decodedToken.role === Role.SENDER ||
       decodedToken.role === Role.RECEIVER ||
@@ -54,12 +53,44 @@ const updateUser = async (
       throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
     }
 
+    // Admin cannot assign Super-Admin role
     if (payload.role === Role.SUPER_ADMIN && decodedToken.role === Role.ADMIN) {
-      throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
+      throw new AppError(
+        httpStatus.FORBIDDEN,
+        "Admin cannot assign Super-Admin role"
+      );
+    }
+
+    // Super-Admin cannot change own role
+    if (
+      decodedToken.role === Role.SUPER_ADMIN &&
+      userId === decodedToken.userId
+    ) {
+      throw new AppError(
+        httpStatus.FORBIDDEN,
+        "Super Admin cannot change own role"
+      );
+    }
+
+    // Super-Admin cannot change another Super-Admin's role
+    if (
+      decodedToken.role === Role.SUPER_ADMIN &&
+      ifUserExist.role === Role.SUPER_ADMIN &&
+      userId !== decodedToken.userId
+    ) {
+      throw new AppError(
+        httpStatus.FORBIDDEN,
+        "Super Admin cannot change another Super Admin's role"
+      );
     }
   }
 
-  if (payload.isActive || payload.isDeleted || payload.isVerified) {
+  // 4. Status flags (isActive, isDeleted, isVerified) can be toggled only by Admin/Super-Admin
+  if (
+    payload.isActive !== undefined ||
+    payload.isDeleted !== undefined ||
+    payload.isVerified !== undefined
+  ) {
     if (
       decodedToken.role === Role.SENDER ||
       decodedToken.role === Role.RECEIVER ||
@@ -165,11 +196,16 @@ const createDeliveryPersonnel = async (payload: Partial<IUser>) => {
   return user;
 };
 
-const blockStatusUser = async (userId: string, isActive: IsActive) => {
+const blockStatusUser = async (
+  userId: string,
+  isActive: IsActive,
+  decodedToken: JwtPayload
+) => {
   const user = await User.findById(userId);
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
+
   // check payload status and isActive same
   if (user.isActive === isActive) {
     throw new AppError(
@@ -177,6 +213,20 @@ const blockStatusUser = async (userId: string, isActive: IsActive) => {
       `User is already in this ${isActive} status`
     );
   }
+
+  // 2. Admin / Super Admin cannot touch another Super-Admin
+  if (
+    (decodedToken.role === Role.ADMIN ||
+      decodedToken.role === Role.SUPER_ADMIN) &&
+    user.role === Role.SUPER_ADMIN &&
+    userId !== decodedToken.userId
+  ) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "Admin / Super Admin cannot change another Super Admin's role"
+    );
+  }
+
   user.isActive = isActive;
   if (isActive === IsActive.BLOCKED) {
     user.isActive = IsActive.BLOCKED;
