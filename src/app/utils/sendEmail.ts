@@ -45,7 +45,7 @@ export const sendEmail = async ({
       attachments: attachments?.map((attachment) => ({
         filename: attachment.filename,
         content: attachment.content,
-        contentTyp: attachment.contentType,
+        contentType: attachment.contentType,
       })),
     });
     // console.log(`\u2709\uFE0F Email sent to ${to}: ${info.messageId}`);
