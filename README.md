@@ -29,7 +29,7 @@ Postman Collection: [Parcel Delivery Management System Postman Collection](https
 - **Zod** — Schema validation
 - **TypeScript** — Optional typing (if enabled)
 - **JWT** — Authentication
-- **SSL_Comerz** — For Future Payment System
+- **SSL_Commerz** — For Future Payment System
 - **dotenv** — Config management
 - **Redis** — Caching and session management
 - **Redis** — Caching and session management
@@ -47,8 +47,8 @@ Postman Collection: [Parcel Delivery Management System Postman Collection](https
 ---
 
 ```
-// SUPER_ADMIN
-email: "super@gmail.com",
+// ADMIN
+email: "bedonad434@ekuali.com",
 password: "12345@Mn"
 
 // SENDER
@@ -57,7 +57,10 @@ password: "12345@Mn"
 
 // RECEIVER
 email: "ciweto1555@ekuali.com",
- password: "12345@Mn",
+password: "12345@Mn",
+
+//Delivery Personnel ID
+ 68ca9515cd3fcd1818b93892
 
 ```
 
